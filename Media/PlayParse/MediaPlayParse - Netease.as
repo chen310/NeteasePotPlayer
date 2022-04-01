@@ -45,7 +45,7 @@ string GetVersion() {
 
 string GetDesc() {
 
-	return "https://www.music.163.com/";
+	return "https://music.163.com/";
 }
 
 string post(string api, string data="") {

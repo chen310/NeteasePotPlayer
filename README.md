@@ -9,7 +9,7 @@
 然后打开 `MediaPlayParse - Netease.as` 文件进行设置
 
 ```AngelScript
-// 填写 Cookie，如 MUSIC_U=xxxxxxxxxxxxx
+// 填写 Cookie
 string cookie = "";
 // 比特率: 128000 | 192000 | 320000 | 999000
 string br = "128000";
@@ -17,11 +17,7 @@ string br = "128000";
 string r = "1080";
 ```
 
-填写 cookie，可以只填写 MUSIC_U 部分，如 `MUSIC_U=xxxxxxxxxxxxx`
-
 填写 cookie 后，则可以播放云盘歌曲，如果是黑胶账号，还能播放 VIP 歌曲。如果不填写 cookie，则只能播放免费歌曲。
-
-
 
 ## 使用
 

@@ -34,7 +34,7 @@ string uid = "";
 
 ## 使用
 
-使用 PotPlayer 打开网易云链接（快捷键为 <kbd>ctrl</kbd> + <kbd>u</kbd>），即可播放。
+使用 PotPlayer 打开网易云链接（快捷键为 <kbd>ctrl</kbd> + <kbd>U</kbd>），即可播放。
 
 ### 播放 MV
 
@@ -51,3 +51,13 @@ string uid = "";
 ### 播放歌手 MV
 
 ![MV](https://cdn.jsdelivr.net/gh/chen310/NeteasePotPlayer/public/img/artist_mv.png)
+
+### 播放歌手歌曲
+
+![ArtistSong](https://cdn.jsdelivr.net/gh/chen310/NeteasePotPlayer/public/img/artist_song.png)
+
+### 我的歌单
+
+按 <kbd>ctrl</kbd> + <kbd>U</kbd>，选择 `NeteaseCloudMusic 我的歌单`，即可得到歌单列表，选择想要播放的歌单，双击即可播放。
+
+![MyPlaylist](https://cdn.jsdelivr.net/gh/chen310/NeteasePotPlayer/public/img/my_playlist.png)

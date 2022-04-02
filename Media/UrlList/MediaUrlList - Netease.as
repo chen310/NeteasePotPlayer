@@ -27,6 +27,10 @@
 string cookie = "";
 // 填写用户 id
 string uid = "";
+// 是否使用第三方 API 地址，如为 true，则需在下方填写 API 地址，否则使用官方 API
+bool useNeteaseApi = false;
+// 第三方 API 地址，详见 https://github.com/Binary/NeteaseCloudMusicApi
+string NeteaseApi = "";
 
 // ******************** 设置结束 ********************
 
@@ -48,12 +52,20 @@ string GetDesc()
 }
 
 string post(string api, string data="") {
-	string Headers = "Accept: */*\r\nConnection: keep-alive\r\nHost: music.163.com\r\nReferer: https://music.163.com\r\n";
 	string UserAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36";
+	string url;
+	string Headers;
+	if (useNeteaseApi) {
+		Headers = "Accept: */*\r\nConnection: keep-alive\r\n";
+		url = NeteaseApi + api;
+	} else {
+		Headers = "Accept: */*\r\nConnection: keep-alive\r\nHost: music.163.com\r\nReferer: https://music.163.com\r\n";
+		url = host + api;
+	}
 	if (!cookie.empty()) {
 		Headers += "Cookie: " + cookie + "\r\n";
 	}
-	return HostUrlGetStringWithAPI(host + api, UserAgent, Headers, data, true);
+	return HostUrlGetStringWithAPI(url, UserAgent, Headers, data, true);
 }
 
 array<dictionary> MyPlaylist() {
@@ -61,7 +73,12 @@ array<dictionary> MyPlaylist() {
 	if (uid.empty()) {
 		return ret;
 	}
-	string res = post("/api/user/playlist?uid=" + uid + "&offse=0&limit=1000&includeVideo=true");
+	string res;
+	if (useNeteaseApi) {
+		res = post("/user/playlist?uid=" + uid + "&limit=1000");
+	} else {
+		res = post("/api/user/playlist?uid=" + uid + "&offse=0&limit=1000&includeVideo=true");
+	}
 	if (!res.empty()) {
 		JsonReader Reader;
 		JsonValue Root;
@@ -88,7 +105,7 @@ array<dictionary> MyPlaylist() {
 array<dictionary> GetCategorys()
 {
 	array<dictionary> ret;
-	
+
 	dictionary item1;
 	item1["title"] = "我的歌单";
 	item1["Category"] = "most";

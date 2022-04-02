@@ -30,6 +30,10 @@ string cookie = "";
 string br = "999000";
 // 清晰度
 string r = "1080";
+// 是否使用第三方 API 地址，如为 true，则需在下方填写 API 地址，否则使用官方 API
+bool useNeteaseApi = false;
+// 第三方 API 地址，详见 https://github.com/Binary/NeteaseCloudMusicApi
+string NeteaseApi = "";
 // 歌词 API
 string lyricApi = "https://netease-lyric.vercel.app";
 
@@ -49,20 +53,33 @@ string GetVersion() {
 
 string GetDesc() {
 
-	return "https://music.163.com/";
+	return "https://music.163.com";
 }
 
 string post(string api, string data="") {
-	string Headers = "Accept: */*\r\nConnection: keep-alive\r\nHost: music.163.com\r\nReferer: https://music.163.com\r\n";
 	string UserAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36";
+	string url;
+	string Headers;
+	if (useNeteaseApi) {
+		Headers = "Accept: */*\r\nConnection: keep-alive\r\n";
+		url = NeteaseApi + api;
+	} else {
+		Headers = "Accept: */*\r\nConnection: keep-alive\r\nHost: music.163.com\r\nReferer: https://music.163.com\r\n";
+		url = host + api;
+	}
 	if (!cookie.empty()) {
 		Headers += "Cookie: " + cookie + "\r\n";
 	}
-	return HostUrlGetStringWithAPI(host + api, UserAgent, Headers, data, true);
+	return HostUrlGetStringWithAPI(url, UserAgent, Headers, data, true);
 }
 
 array<dictionary> Album(string id) {
-	string res = post("/api/v1/album/" + id);
+	string res;
+	if (useNeteaseApi) {
+		res = post("/album?id=" + id);
+	} else {
+		res = post("/api/v1/album/" + id);
+	}
 	array<dictionary> songs;
 	if (!res.empty()) {
 		JsonReader Reader;
@@ -88,7 +105,12 @@ array<dictionary> Album(string id) {
 }
 
 array<dictionary> Playlist(string id) {
-	string res = post("/api/v6/playlist/detail?id=" + id + "&n=100000&s=8");
+	string res;
+	if (useNeteaseApi) {
+		res = post("/playlist/detail?id=" + id);
+	} else {
+		res = post("/api/v6/playlist/detail?id=" + id + "&n=100000&s=8");
+	}
 	array<dictionary> songs;
 	bool isVideoPlaylist;
 	if (!res.empty()) {
@@ -143,7 +165,12 @@ array<dictionary> Playlist(string id) {
 }
 
 array<dictionary> ArtistSong(string id) {
-	string res = post("/api/v1/artist/songs?id=" + id + "&offset=0&limit=1000&private_cloud=true&work_type=1&order=hot");
+	string res;
+	if (useNeteaseApi) {
+		res = post("/artist/songs?id=" + id + "&limit=1000");
+	} else {
+		res = post("/api/v1/artist/songs?id=" + id + "&offset=0&limit=1000&private_cloud=true&work_type=1&order=hot");
+	}
 	array<dictionary> songs;
 	if (!res.empty()) {
 		JsonReader Reader;
@@ -169,7 +196,12 @@ array<dictionary> ArtistSong(string id) {
 }
 
 array<dictionary> ArtistMV(string id) {
-	string res = post("/api/artist/mvs?artistId=" + id + "&offset=0&limit=1000");
+	string res;
+	if (useNeteaseApi) {
+		res = post("/artist/mv?id=" + id + "&offset=0&limit=1000");
+	} else {
+		res = post("/api/artist/mvs?artistId=" + id + "&offset=0&limit=1000");
+	}
 	array<dictionary> mvs;
 	if (!res.empty()) {
 		JsonReader Reader;
@@ -196,7 +228,12 @@ array<dictionary> ArtistMV(string id) {
 }
 
 string MlogUrl(string id, const string &in path, dictionary &MetaData, array<dictionary> &QualityList) {
-	string res = post("/api/mlog/detail/v1?type=1&id=" + id + "&resolution=" + r);
+	string res;
+	if (useNeteaseApi) {
+		res = post("/mlog/url?id=" + id + "&res=" + r);
+	} else {
+		res = post("/api/mlog/detail/v1?type=1&id=" + id + "&resolution=" + r);
+	}
 	if (!res.empty()) {
 		JsonReader Reader;
 		JsonValue Root;
@@ -215,7 +252,12 @@ string MlogUrl(string id, const string &in path, dictionary &MetaData, array<dic
 }
 
 string VideoUrl(string id, const string &in path, dictionary &MetaData, array<dictionary> &QualityList) {
-	string res = post("/api/cloudvideo/v1/video/detail?id=" + id);
+	string res;
+	if (useNeteaseApi) {
+		res = post("/video/detail?id=" + id);
+	} else {
+		res = post("/api/cloudvideo/v1/video/detail?id=" + id);
+	}
 	if (!res.empty()) {
 		JsonReader Reader;
 		JsonValue Root;
@@ -229,7 +271,11 @@ string VideoUrl(string id, const string &in path, dictionary &MetaData, array<di
 			}
 		}
 	}
-	res = post("/api/cloudvideo/playurl?ids=%5B%22" + id + "%22%5D&resolution=" + r);
+	if (useNeteaseApi) {
+		res = post("/video/url?id" + id + "&res=" + r);
+	} else {
+		res = post("/api/cloudvideo/playurl?ids=%5B%22" + id + "%22%5D&resolution=" + r);
+	}
 	if (!res.empty()) {
 		JsonReader Reader;
 		JsonValue Root;
@@ -256,7 +302,12 @@ string VideoUrl(string id, const string &in path, dictionary &MetaData, array<di
 
 
 string MVUrl(string id, const string &in path, dictionary &MetaData, array<dictionary> &QualityList) {
-	string res = post("/api/v1/mv/detail?id=" + id);
+	string res;
+	if (useNeteaseApi) {
+		res = post("/mv/detail?mvid=" + id);
+	} else {
+		res = post("/api/v1/mv/detail?id=" + id);
+	}
 	if (!res.empty()) {
 		JsonReader Reader;
 		JsonValue Root;
@@ -270,7 +321,11 @@ string MVUrl(string id, const string &in path, dictionary &MetaData, array<dicti
 			}
 		}
 	}
-	res = post("/api/song/enhance/play/mv/url?id=" + id + "&r=1080");
+	if (useNeteaseApi) {
+		res = post("/mv/url?id=" + id + "&r=" + r);
+	} else {
+		res = post("/api/song/enhance/play/mv/url?id=" + id + "&r=" + r);
+	}
 	if (!res.empty())
 	{
 		JsonReader Reader;
@@ -297,7 +352,12 @@ string MVUrl(string id, const string &in path, dictionary &MetaData, array<dicti
 }
 
 string SongUrl(string id, const string &in path, dictionary &MetaData, array<dictionary> &QualityList) {
-	string res = post("/api/v3/song/detail?c=[{\"id\":" + id +"}]");
+	string res;
+	if (useNeteaseApi) {
+		res = post("/song/detail?ids=" + id);
+	} else {
+		res = post("/api/v3/song/detail?c=[{\"id\":" + id +"}]");
+	}
 	if (!res.empty()) {
 		JsonReader Reader;
 		JsonValue Root;
@@ -324,7 +384,11 @@ string SongUrl(string id, const string &in path, dictionary &MetaData, array<dic
 			}
 		}
 	}
-	res = post("/api/song/enhance/player/url?ids=%5B" + id + "%5D&br=" + br);
+	if (useNeteaseApi) {
+		res = post("/song/url?id=" + id + "&br=" + br);
+	} else {
+		res = post("/api/song/enhance/player/url?ids=%5B" + id + "%5D&br=" + br);
+	}
 	if (!res.empty())
 	{
 		JsonReader Reader;

@@ -57,6 +57,32 @@ string post(string api, string data="") {
 	return HostUrlGetStringWithAPI(host + api, UserAgent, Headers, data, true);
 }
 
+array<dictionary> Album(string id) {
+	string res = post("/api/v1/album/" + id);
+	array<dictionary> songs;
+	if (!res.empty()) {
+		JsonReader Reader;
+		JsonValue Root;
+		if (Reader.parse(res, Root) && Root.isObject()) {
+			if (Root["code"].asInt() == 200) {
+				JsonValue data = Root["songs"];
+				if (data.isArray()) {
+					for (uint i = 0; i < data.size(); i++) {
+						JsonValue item = data[i];
+						if (item.isObject()) {
+							dictionary song;
+							song["title"] = item["name"].asString();
+							song["url"] = host + "/song/?id=" + item["id"].asString();
+							songs.insertLast(song);
+						}
+					}
+				}
+			}
+		}
+	}
+	return songs;
+}
+
 array<dictionary> Playlist(string id) {
 	string res = post("/api/v6/playlist/detail?id=" + id + "&n=100000&s=8");
 	array<dictionary> songs;
@@ -327,6 +353,10 @@ bool PlaylistCheck(const string &in path) {
 		return true;
 	}
 
+	if (path.find("/album") >= 0) {
+		return true;
+	}
+
 	return false;
 }
 
@@ -356,6 +386,10 @@ array<dictionary> PlaylistParse(const string &in path) {
 
 	if (path.find("/playlist") >= 0) {
 		return Playlist(id);
+	}
+
+	if (path.find("/album") >= 0) {
+		return Album(id);
 	}
 
 	return result;

@@ -25,7 +25,7 @@
 // 填写 Cookie，如 MUSIC_U=xxxxxxxxxxxxx
 string cookie = "";
 // 比特率: 128000 | 192000 | 320000 | 999000
-string br = "128000";
+string br = "999000";
 // 清晰度
 string r = "1080";
 

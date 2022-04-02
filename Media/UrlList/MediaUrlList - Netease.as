@@ -1,6 +1,7 @@
 /*
 	media url search by netease
-
+	author: chen310
+	link: https://github.com/chen310/NeteasePotPlayer
 */
 
 // void OnInitialize()

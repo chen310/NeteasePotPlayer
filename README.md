@@ -32,6 +32,8 @@ string cookie = "";
 string uid = "";
 ```
 
+需要填写自己的用户 id。如果不填写 cookie，则无法查看隐私歌单。
+
 ## 使用
 
 使用 PotPlayer 打开网易云链接（快捷键为 <kbd>ctrl</kbd> + <kbd>U</kbd>），即可播放。

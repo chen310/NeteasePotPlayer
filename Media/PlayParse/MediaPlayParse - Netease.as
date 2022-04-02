@@ -1,5 +1,7 @@
 /*
 	Netease media parse
+	author: chen310
+	link: https://github.com/chen310/NeteasePotPlayer
 */
 
 // void OnInitialize()

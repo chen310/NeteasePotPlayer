@@ -30,6 +30,8 @@ string cookie = "";
 string br = "999000";
 // 清晰度
 string r = "1080";
+// 歌词 API
+string lyricApi = "https://netease-lyric.vercel.app";
 
 // ******************** 设置结束 ********************
 
@@ -307,6 +309,14 @@ string SongUrl(string id, const string &in path, dictionary &MetaData, array<dic
 					if (item.isObject()) {
 						MetaData["title"] = item["ar"][0]["name"].asString() + ' - ' + item["name"].asString();
 						MetaData["SourceUrl"] = path;
+						if (!lyricApi.empty()){
+							array<dictionary> subtitle;
+							dictionary dic;
+							dic["name"] = item["name"].asString();
+							dic["url"] = lyricApi + "/lyric?id=" + id;
+							subtitle.insertLast(dic);
+							MetaData["subtitle"] = subtitle;
+						}
 					}
 				}
 			} else {

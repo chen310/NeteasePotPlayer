@@ -351,39 +351,39 @@ string MVUrl(string id, const string &in path, dictionary &MetaData, array<dicti
 	return "";
 }
 
-string SongUrl(string id, const string &in path, dictionary &MetaData, array<dictionary> &QualityList) {
+array<dictionary> Djradio(string id) {
 	string res;
 	if (useNeteaseApi) {
-		res = post("/song/detail?ids=" + id);
+		res = post("/dj/program?rid=" + id + "&limit=1000");
 	} else {
-		res = post("/api/v3/song/detail?c=[{\"id\":" + id +"}]");
+		res = post("/api/dj/program/byradio?radioId=" + id + "&offset=0&limit=1000");
 	}
+	array<dictionary> songs;
 	if (!res.empty()) {
 		JsonReader Reader;
 		JsonValue Root;
 		if (Reader.parse(res, Root) && Root.isObject()) {
 			if (Root["code"].asInt() == 200) {
-				JsonValue data = Root["songs"];
+				JsonValue data = Root["programs"];
 				if (data.isArray()) {
-					JsonValue item = data[0];
-					if (item.isObject()) {
-						MetaData["title"] = item["ar"][0]["name"].asString() + ' - ' + item["name"].asString();
-						MetaData["SourceUrl"] = path;
-						if (!lyricApi.empty()){
-							array<dictionary> subtitle;
-							dictionary dic;
-							dic["name"] = item["name"].asString();
-							dic["url"] = lyricApi + "/lyric?id=" + id;
-							subtitle.insertLast(dic);
-							MetaData["subtitle"] = subtitle;
+					for (uint i = 0; i < data.size(); i++) {
+						JsonValue item = data[i];
+						if (item.isObject()) {
+							dictionary song;
+							song["title"] = item["name"].asString();
+							song["url"] = host + "#/program?id=" + item["id"].asString();
+							songs.insertLast(song);
 						}
 					}
 				}
-			} else {
-				return "";
 			}
 		}
 	}
+	return songs;
+}
+
+string GetSongUrl(string id) {
+	string res;
 	if (useNeteaseApi) {
 		res = post("/song/url?id=" + id + "&br=" + br);
 	} else {
@@ -413,6 +413,78 @@ string SongUrl(string id, const string &in path, dictionary &MetaData, array<dic
 	return "";
 }
 
+string SongUrl(string id, const string &in path, dictionary &MetaData, array<dictionary> &QualityList) {
+	string res;
+	if (useNeteaseApi) {
+		res = post("/song/detail?ids=" + id);
+	} else {
+		res = post("/api/v3/song/detail?c=[{\"id\":" + id +"}]");
+	}
+	if (!res.empty()) {
+		JsonReader Reader;
+		JsonValue Root;
+		if (Reader.parse(res, Root) && Root.isObject()) {
+			if (Root["code"].asInt() == 200) {
+				JsonValue data = Root["songs"];
+				if (data.isArray()) {
+					JsonValue item = data[0];
+					if (item.isObject()) {
+						if (!item["name"].asString().empty()) {
+							MetaData["title"] = item["ar"][0]["name"].asString() + ' - ' + item["name"].asString();
+						}
+						MetaData["SourceUrl"] = path;
+						if (!lyricApi.empty()){
+							array<dictionary> subtitle;
+							dictionary dic;
+							dic["name"] = item["name"].asString();
+							dic["url"] = lyricApi + "/lyric?id=" + id;
+							subtitle.insertLast(dic);
+							MetaData["subtitle"] = subtitle;
+						}
+					}
+				}
+			} else {
+				return "";
+			}
+		}
+	}
+	return GetSongUrl(id);;
+}
+
+string Program(string id, const string &in path, dictionary &MetaData, array<dictionary> &QualityList) {
+	string res;
+	if (useNeteaseApi) {
+		res = post("/dj/program/detail?id=" + id);
+	} else {
+		res = post("/api/dj/program/detail?id=" + id);
+	}
+	string songId = "0";
+	if (!res.empty()) {
+		JsonReader Reader;
+		JsonValue Root;
+		if (Reader.parse(res, Root) && Root.isObject()) {
+			if (Root["code"].asInt() == 200) {
+				JsonValue item = Root["program"]["mainSong"];
+				if (item.isObject()) {
+					songId = item["id"].asString();
+					MetaData["title"] = item["name"].asString();
+					MetaData["SourceUrl"] = path;
+					if (!lyricApi.empty()){
+						array<dictionary> subtitle;
+						dictionary dic;
+						dic["name"] = item["name"].asString();
+						dic["url"] = lyricApi + "/lyric?id=" + id;
+						subtitle.insertLast(dic);
+						MetaData["subtitle"] = subtitle;
+					}
+				}
+			} else {
+				return "";
+			}
+		}
+	}
+	return GetSongUrl(songId);
+}
 
 bool PlayitemCheck(const string &in path) {
 	if (path.find("music.163.com") < 0) {
@@ -432,6 +504,10 @@ bool PlayitemCheck(const string &in path) {
 	}
 
 	if (path.find("#/mv") >= 0 || path.find("music.163.com/mv") >= 0) {
+		return true;
+	}
+
+	if (path.find("/program") >= 0) {
 		return true;
 	}
 
@@ -456,6 +532,10 @@ bool PlaylistCheck(const string &in path) {
 	}
 
 	if (path.find("/album") >= 0) {
+		return true;
+	}
+
+	if (path.find("/djradio") >= 0) {
 		return true;
 	}
 
@@ -498,6 +578,10 @@ array<dictionary> PlaylistParse(const string &in path) {
 		return ArtistSong(id);
 	}
 
+	if (path.find("/djradio") >= 0) {
+		return Djradio(id);
+	}
+
 	return result;
 }
 
@@ -521,6 +605,10 @@ string PlayitemParse(const string &in path, dictionary &MetaData, array<dictiona
 
 	if (path.find("/video") >= 0) {
 		return VideoUrl(id, path, MetaData, QualityList);
+	}
+
+	if (path.find("/program") >= 0) {
+		return Program(id, path, MetaData, QualityList);
 	}
 
 	return path;

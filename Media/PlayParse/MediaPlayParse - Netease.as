@@ -535,7 +535,7 @@ bool PlaylistCheck(const string &in path) {
 		return true;
 	}
 
-	if (path.find("/djradio") >= 0) {
+	if (path.find("/djradio") >= 0 or path.find("/radio") >= 0) {
 		return true;
 	}
 
@@ -578,7 +578,7 @@ array<dictionary> PlaylistParse(const string &in path) {
 		return ArtistSong(id);
 	}
 
-	if (path.find("/djradio") >= 0) {
+	if (path.find("/djradio") >= 0 or path.find("/radio") >= 0) {
 		return Djradio(id);
 	}
 

@@ -19,9 +19,17 @@ string cookie = "";
 string br = "128000";
 // 清晰度
 string r = "1080";
+// 是否使用第三方 API 地址，如为 true，则需在下方填写 API 地址，否则使用官方 API
+bool useNeteaseApi = false;
+// 第三方 API 地址，详见 https://github.com/Binary/NeteaseCloudMusicApi
+string NeteaseApi = "";
+// 歌词 API
+string lyricApi = "https://netease-lyric.vercel.app";
 ```
 
 填写 cookie 后，则可以播放云盘歌曲，如果是黑胶账号，还能播放 VIP 歌曲。如果不填写 cookie，则只能播放免费歌曲。
+
+插件默认使用的使官方 API，如果要使用自己搭建的 API，请将 `useNeteaseApi` 变量的值设置为 true，并在 `NeteaseApi` 中填写服务器地址。服务器搭建方法详见 [NeteaseCloudMusicApi](https://github.com/Binaryify/NeteaseCloudMusicApi)
 
 然后打开 `MediaUrlList - Netease.as` 文件进行设置。
 
@@ -30,6 +38,12 @@ string r = "1080";
 string cookie = "";
 // 填写用户 id
 string uid = "";
+// 是否使用第三方 API 地址，如为 true，则需在下方填写 API 地址，否则使用官方 API
+bool useNeteaseApi = false;
+// 第三方 API 地址，详见 https://github.com/Binary/NeteaseCloudMusicApi
+string NeteaseApi = "";
+// 歌词 API
+string lyricApi = "https://netease-lyric.vercel.app";
 ```
 
 需要填写自己的用户 id。如果不填写 cookie，则无法查看隐私歌单。
@@ -57,6 +71,10 @@ string uid = "";
 ### 播放歌手歌曲
 
 ![ArtistSong](https://cdn.jsdelivr.net/gh/chen310/NeteasePotPlayer/public/img/artist_song.png)
+
+### 播放电台
+
+![Radio](https://cdn.jsdelivr.net/gh/chen310/NeteasePotPlayer/public/img/radio.png)
 
 ### 我的歌单
 

@@ -149,7 +149,7 @@ array<dictionary> Playlist(string id) {
 							JsonValue item = data[i];
 							if (item.isObject()) {
 								dictionary song;
-								song["title"] = item["name"].asString();
+								song["title"] = item["ar"][0]["name"].asString() + ' - ' + item["name"].asString();
 								song["duration"] = item["dt"].asInt();
 								song["url"] = host + "/song/?id=" + item["id"].asString();
 								songs.insertLast(song);

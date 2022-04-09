@@ -539,6 +539,10 @@ bool PlaylistCheck(const string &in path) {
 		return true;
 	}
 
+	if (path.find("/discover/toplist") >= 0) {
+		return true;
+	}
+
 	return false;
 }
 
@@ -559,7 +563,12 @@ array<dictionary> PlaylistParse(const string &in path) {
 	string id = parseId(path);
 
 	if (id.empty()) {
-		return result;
+		// 飙升榜
+		if (path.find("/discover/toplist") >= 0) {
+			id = "19723756";
+		} else {
+			return result;
+		}
 	}
 
 	if (path.find("/artist/mv") >= 0) {
@@ -580,6 +589,10 @@ array<dictionary> PlaylistParse(const string &in path) {
 
 	if (path.find("/djradio") >= 0 or path.find("/radio") >= 0) {
 		return Djradio(id);
+	}
+
+	if (path.find("/discover/toplist") >= 0) {
+		return Playlist(id);
 	}
 
 	return result;

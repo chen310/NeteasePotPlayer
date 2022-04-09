@@ -1,6 +1,6 @@
 # NeteasePotPlayer
 
-适用于 PotPlayer 的网易云音乐插件
+适用于 PotPlayer 的网易云音乐插件。如果配合[油猴脚本](https://greasyfork.org/zh-CN/scripts/443047-neteasepotplayer)，可以直接在网页打开 PotPlayer 进行播放
 
 ## 安装插件
 

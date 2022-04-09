@@ -482,6 +482,37 @@ string SongUrl(string id, const string &in path, dictionary &MetaData, array<dic
 	return GetSongUrl(id);;
 }
 
+array<dictionary> BoughtSongs() {
+	string res;
+	if (useNeteaseApi) {
+		res = post("/song/purchased?offset=0&limit=1000");
+	} else {
+		res = post("/api/single/mybought/song/list?offset=0&limit=1000");
+	}
+	array<dictionary> songs;
+	if (!res.empty()) {
+		JsonReader Reader;
+		JsonValue Root;
+		if (Reader.parse(res, Root) && Root.isObject()) {
+			if (Root["code"].asInt() == 200) {
+				JsonValue data = Root["data"]["list"];
+				if (data.isArray()) {
+					for (uint i = 0; i < data.size(); i++) {
+						JsonValue item = data[i];
+						if (item.isObject()) {
+							dictionary song;
+							song["title"] = item["artistName"].asString() + " - " + item["name"].asString();
+							song["url"] = host + "/song/?id=" + item["songId"].asString();
+							songs.insertLast(song);
+						}
+					}
+				}
+			}
+		}
+	}
+	return songs;
+}
+
 string Program(string id, const string &in path, dictionary &MetaData, array<dictionary> &QualityList) {
 	string res;
 	if (useNeteaseApi) {
@@ -578,6 +609,10 @@ bool PlaylistCheck(const string &in path) {
 		return true;
 	}
 
+	if (path.find("/purchasedsong") >= 0) {
+		return true;
+	}
+
 	return false;
 }
 
@@ -598,6 +633,10 @@ array<dictionary> PlaylistParse(const string &in path) {
 
 	if (path.find("/recommend/taste") >= 0) {
 		return RecommendSongs();
+	}
+
+	if (path.find("/purchasedsong") >= 0) {
+		return BoughtSongs();
 	}
 
 	string id = parseId(path);

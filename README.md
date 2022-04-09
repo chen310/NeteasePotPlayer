@@ -54,27 +54,108 @@ string lyricApi = "https://netease-lyric.vercel.app";
 
 ### 播放 MV
 
+示例链接
+
+```
+https://music.163.com/mv?id=482078
+```
+
 ![MV](https://cdn.jsdelivr.net/gh/chen310/NeteasePotPlayer/public/img/mv.png)
 
 ### 播放歌曲
+
+示例链接
+
+```
+https://music.163.com/song?id=186331
+```
 
 ![Song](https://cdn.jsdelivr.net/gh/chen310/NeteasePotPlayer/public/img/song.png)
 
 ### 播放歌单
 
-![MV](https://cdn.jsdelivr.net/gh/chen310/NeteasePotPlayer/public/img/playlist.png)
+示例链接
+
+```
+https://music.163.com/playlist?id=492068610
+```
+
+![Playlist](https://cdn.jsdelivr.net/gh/chen310/NeteasePotPlayer/public/img/playlist.png)
+
+### 播放视频歌单
+
+示例链接
+
+```
+https://music.163.com/playlist?id=6642773122
+```
+
+![VideoPlaylist](https://cdn.jsdelivr.net/gh/chen310/NeteasePotPlayer/public/img/video_playlist.png)
+
+### 播放专辑
+
+示例链接
+
+```
+https://music.163.com/#/album?id=6491
+```
+
+![Album](https://cdn.jsdelivr.net/gh/chen310/NeteasePotPlayer/public/img/album.png)
 
 ### 播放歌手 MV
 
-![MV](https://cdn.jsdelivr.net/gh/chen310/NeteasePotPlayer/public/img/artist_mv.png)
+示例链接
+
+```
+https://music.163.com/#/artist/mv?id=7763
+```
+
+![ArtistMV](https://cdn.jsdelivr.net/gh/chen310/NeteasePotPlayer/public/img/artist_mv.png)
 
 ### 播放歌手歌曲
+
+示例链接
+
+```
+https://music.163.com/#/artist?id=2116
+```
 
 ![ArtistSong](https://cdn.jsdelivr.net/gh/chen310/NeteasePotPlayer/public/img/artist_song.png)
 
 ### 播放电台
 
+示例链接
+
+```
+https://music.163.com/#/djradio?id=966559685
+```
+
 ![Radio](https://cdn.jsdelivr.net/gh/chen310/NeteasePotPlayer/public/img/radio.png)
+
+### 已购单曲
+
+示例链接
+
+```
+https://music.163.com/#/member/purchasedsong
+```
+
+### 每日歌曲推荐
+
+示例链接
+
+```
+https://music.163.com/#/discover/recommend/taste
+```
+
+### 排行榜
+
+示例链接
+
+```
+https://music.163.com/#/discover/toplist
+https://music.163.com/#/discover/toplist?id=3779629
+```
 
 ### 我的歌单
 

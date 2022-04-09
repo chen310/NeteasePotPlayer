@@ -164,6 +164,37 @@ array<dictionary> Playlist(string id) {
 	return songs;
 }
 
+array<dictionary> RecommendSongs() {
+	string res;
+	if (useNeteaseApi) {
+		res = post("/recommend/songs");
+	} else {
+		res = post("/api/v2/discovery/recommend/songs");
+	}
+	array<dictionary> songs;
+	if (!res.empty()) {
+		JsonReader Reader;
+		JsonValue Root;
+		if (Reader.parse(res, Root) && Root.isObject()) {
+			if (Root["code"].asInt() == 200) {
+				JsonValue data = Root["recommend"];
+				if (data.isArray()) {
+					for (uint i = 0; i < data.size(); i++) {
+						JsonValue item = data[i];
+						if (item.isObject()) {
+							dictionary song;
+							song["title"] = item["name"].asString();
+							song["url"] = host + "/song/?id=" + item["id"].asString();
+							songs.insertLast(song);
+						}
+					}
+				}
+			}
+		}
+	}
+	return songs;
+}
+
 array<dictionary> ArtistSong(string id) {
 	string res;
 	if (useNeteaseApi) {
@@ -543,6 +574,10 @@ bool PlaylistCheck(const string &in path) {
 		return true;
 	}
 
+	if (path.find("/recommend/taste") >= 0) {
+		return true;
+	}
+
 	return false;
 }
 
@@ -560,8 +595,12 @@ string parseId(string url) {
 
 array<dictionary> PlaylistParse(const string &in path) {
 	array<dictionary> result;
-	string id = parseId(path);
 
+	if (path.find("/recommend/taste") >= 0) {
+		return RecommendSongs();
+	}
+
+	string id = parseId(path);
 	if (id.empty()) {
 		// 飙升榜
 		if (path.find("/discover/toplist") >= 0) {

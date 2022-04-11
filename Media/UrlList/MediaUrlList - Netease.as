@@ -102,19 +102,71 @@ array<dictionary> MyPlaylist() {
 	return ret;
 }
 
+array<dictionary> RecommendPlaylist() {
+	array<dictionary> ret;
+	if (uid.empty() or cookie.empty()) {
+		return ret;
+	}
+
+	dictionary recommendSongs;
+	recommendSongs["title"] = "每日推荐歌曲";
+	recommendSongs["url"] = host + "/#/discover/recommend/taste";
+	ret.insertLast(recommendSongs);
+
+	string res;
+	if (useNeteaseApi) {
+		res = post("/recommend/resource");
+	} else {
+		res = post("/api/v1/discovery/recommend/resource");
+	}
+	if (!res.empty()) {
+		JsonReader Reader;
+		JsonValue Root;
+		if (Reader.parse(res, Root) && Root.isObject()) {
+			if (Root["code"].asInt() == 200) {
+				JsonValue data = Root["recommend"];
+				if (data.isArray()) {
+					for (uint i = 0; i < data.size(); i++) {
+						JsonValue item = data[i];
+						if (item.isObject()) {
+							dictionary playlist;
+							playlist["title"] = item["name"].asString();
+							playlist["url"] = host + "/#/playlist?id=" + item["id"].asString();
+							ret.insertLast(playlist);
+						}
+					}
+				}
+			}
+		}
+	}
+	return ret;
+}
+
 array<dictionary> GetCategorys()
 {
 	array<dictionary> ret;
 
 	dictionary item1;
 	item1["title"] = "我的歌单";
-	item1["Category"] = "most";
+	item1["Category"] = "MyPlaylist";
 	ret.insertLast(item1);
+
+	dictionary item2;
+	item2["title"] = "推荐歌单";
+	item2["Category"] = "RecommendPlaylist";
+	ret.insertLast(item2);
 
 	return ret;
 }
 
 array<dictionary> GetUrlList(string Category, string Extra, string PathToken, string Query, string PageToken)
 {
-	return MyPlaylist();
+	if (Category == "MyPlaylist")
+		return MyPlaylist();
+
+	if (Category == "RecommendPlaylist")
+		return RecommendPlaylist();
+
+	array<dictionary> ret;
+	return ret;
 }

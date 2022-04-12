@@ -183,7 +183,7 @@ array<dictionary> RecommendSongs() {
 						JsonValue item = data[i];
 						if (item.isObject()) {
 							dictionary song;
-							song["title"] = item["name"].asString();
+							song["title"] = item["artists"][0]["name"].asString() + " - "  + item["name"].asString();
 							song["url"] = host + "/song/?id=" + item["id"].asString();
 							songs.insertLast(song);
 						}

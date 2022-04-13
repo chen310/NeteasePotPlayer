@@ -258,6 +258,42 @@ array<dictionary> ArtistMV(string id) {
 	return mvs;
 }
 
+array<dictionary> MVSublist() {
+	string res;
+	if (useNeteaseApi) {
+		res = post("/mv/sublist");
+	} else {
+		res = post("/api/cloudvideo/allvideo/sublist");
+	}
+	array<dictionary> songs;
+	if (!res.empty()) {
+		JsonReader Reader;
+		JsonValue Root;
+		if (Reader.parse(res, Root) && Root.isObject()) {
+			if (Root["code"].asInt() == 200) {
+				JsonValue data = Root["data"];
+				if (data.isArray()) {
+					for (uint i = 0; i < data.size(); i++) {
+						JsonValue item = data[i];
+						if (item.isObject()) {
+							dictionary song;
+							int videoType = item["type"].asInt();
+							song["title"] = item["title"].asString();
+							if (videoType == 1) {
+								song["url"] = host + "/#/video?id=" + item["vid"].asString();
+							} else if (videoType == 0) {
+								song["url"] = host + "/mv/?id=" + item["vid"].asString();
+							}
+							songs.insertLast(song);
+						}
+					}
+				}
+			}
+		}
+	}
+	return songs;
+}
+
 string MlogUrl(string id, const string &in path, dictionary &MetaData, array<dictionary> &QualityList) {
 	string res;
 	if (useNeteaseApi) {
@@ -613,6 +649,10 @@ bool PlaylistCheck(const string &in path) {
 		return true;
 	}
 
+	if (path.find("/my/m/music/mv") >= 0) {
+		return true;
+	}
+
 	return false;
 }
 
@@ -637,6 +677,10 @@ array<dictionary> PlaylistParse(const string &in path) {
 
 	if (path.find("/purchasedsong") >= 0) {
 		return BoughtSongs();
+	}
+
+	if (path.find("/my/m/music/mv") >= 0) {
+		return MVSublist();
 	}
 
 	string id = parseId(path);

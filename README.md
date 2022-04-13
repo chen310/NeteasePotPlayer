@@ -157,6 +157,14 @@ https://music.163.com/#/discover/toplist
 https://music.163.com/#/discover/toplist?id=3779629
 ```
 
+### 收藏的视频
+
+示例链接
+
+```
+https://music.163.com/#/my/m/music/mv
+```
+
 ### 我的歌单
 
 按 <kbd>ctrl</kbd> + <kbd>U</kbd>，选择 `NeteaseCloudMusic 我的歌单`，即可得到歌单列表，选择想要播放的歌单，双击即可播放。

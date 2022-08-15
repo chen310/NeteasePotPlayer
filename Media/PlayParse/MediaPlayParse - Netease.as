@@ -31,6 +31,8 @@ string cookie = "";
 string br = "999000";
 // 清晰度
 string r = "1080";
+// 是否跳过不能播放的歌曲
+bool skipUnavailable = true;
 // 是否使用第三方 API 地址，如为 true，则需在下方填写 API 地址，否则使用官方 API
 bool useNeteaseApi = false;
 // 第三方 API 地址，详见 https://github.com/Binary/NeteaseCloudMusicApi
@@ -49,7 +51,7 @@ string GetTitle() {
 
 string GetVersion() {
 
-	return "1.2";
+	return "1.3";
 }
 
 string GetDesc() {
@@ -92,6 +94,9 @@ array<dictionary> Album(string id) {
 					for (uint i = 0; i < data.size(); i++) {
 						JsonValue item = data[i];
 						if (item.isObject()) {
+							if (skipUnavailable && item["privilege"]["pl"].asInt() == 0) {
+								continue;
+							}
 							dictionary song;
 							song["title"] = item["name"].asString();
 							song["url"] = host + "/song/?id=" + item["id"].asString();
@@ -145,10 +150,15 @@ array<dictionary> Playlist(string id) {
 					}
 				} else {
 					JsonValue data = Root["playlist"]["tracks"];
+					JsonValue privileges = Root["privileges"];
 					if (data.isArray()) {
 						for (uint i = 0; i < data.size(); i++) {
 							JsonValue item = data[i];
+							JsonValue privilege = privileges[i];
 							if (item.isObject()) {
+								if (skipUnavailable && privilege["pl"].asInt() == 0) {
+									continue;
+								}
 								dictionary song;
 								song["title"] = item["ar"][0]["name"].asString() + ' - ' + item["name"].asString();
 								song["duration"] = item["dt"].asInt();
@@ -183,6 +193,9 @@ array<dictionary> RecommendSongs() {
 					for (uint i = 0; i < data.size(); i++) {
 						JsonValue item = data[i];
 						if (item.isObject()) {
+							if (skipUnavailable && item["privilege"]["pl"].asInt() == 0) {
+								continue;
+							}
 							dictionary song;
 							song["title"] = item["artists"][0]["name"].asString() + " - "  + item["name"].asString();
 							song["url"] = host + "/song/?id=" + item["id"].asString();
@@ -214,6 +227,9 @@ array<dictionary> ArtistSong(string id) {
 					for (uint i = 0; i < data.size(); i++) {
 						JsonValue item = data[i];
 						if (item.isObject()) {
+							if (skipUnavailable && item["privilege"]["pl"].asInt() == 0) {
+								continue;
+							}
 							dictionary song;
 							song["title"] = item["name"].asString();
 							song["url"] = host + "/song/?id=" + item["id"].asString();

@@ -19,6 +19,8 @@ string cookie = "";
 string br = "128000";
 // 清晰度
 string r = "1080";
+// 是否跳过不能播放的歌曲
+bool skipUnavailable = true;
 // 是否使用第三方 API 地址，如为 true，则需在下方填写 API 地址，否则使用官方 API
 bool useNeteaseApi = false;
 // 第三方 API 地址，详见 https://github.com/Binary/NeteaseCloudMusicApi
@@ -42,8 +44,6 @@ string uid = "";
 bool useNeteaseApi = false;
 // 第三方 API 地址，详见 https://github.com/Binary/NeteaseCloudMusicApi
 string NeteaseApi = "";
-// 歌词 API
-string lyricApi = "https://netease-lyric.vercel.app";
 ```
 
 需要填写自己的用户 id。如果不填写 cookie，则无法查看隐私歌单。

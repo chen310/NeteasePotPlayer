@@ -31,7 +31,9 @@ string lyricApi = "https://netease-lyric.vercel.app";
 
 填写 cookie 后，则可以播放云盘歌曲，如果是黑胶账号，还能播放 VIP 歌曲。如果不填写 cookie，则只能播放免费歌曲。
 
-插件默认使用的使官方 API，如果要使用自己搭建的 API，请将 `useNeteaseApi` 变量的值设置为 true，并在 `NeteaseApi` 中填写服务器地址。服务器搭建方法详见 [NeteaseCloudMusicApi](https://github.com/Binaryify/NeteaseCloudMusicApi)
+如果无法访问 vercel，可以自己搭建歌词 API 并填写服务器地址: [NeteaseLyric](https://github.com/chen310/NeteaseLyric)
+
+插件默认使用的是官方 API，如果要使用自己搭建的 API，请将 `useNeteaseApi` 变量的值设置为 true，并在 `NeteaseApi` 中填写服务器地址。服务器搭建方法详见 [NeteaseCloudMusicApi](https://github.com/Binaryify/NeteaseCloudMusicApi)
 
 然后打开 `MediaUrlList - Netease.as` 文件进行设置。
 

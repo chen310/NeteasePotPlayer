@@ -99,7 +99,7 @@ array<dictionary> Album(string id) {
 							}
 							dictionary song;
 							song["title"] = item["name"].asString();
-							song["url"] = host + "/song/?id=" + item["id"].asString();
+							song["url"] = host + "/song?id=" + item["id"].asString();
 							songs.insertLast(song);
 						}
 					}
@@ -142,7 +142,7 @@ array<dictionary> Playlist(string id) {
 								} else if (videoType == 2) {
 									song["url"] = "https://st.music.163.com/mlog/mlog.html?id=" + id;
 								} else {
-									song["url"] = host + "/mv/?id=" + id;
+									song["url"] = host + "/mv?id=" + id;
 								}
 								songs.insertLast(song);
 							}
@@ -162,7 +162,7 @@ array<dictionary> Playlist(string id) {
 								dictionary song;
 								song["title"] = item["ar"][0]["name"].asString() + ' - ' + item["name"].asString();
 								song["duration"] = item["dt"].asInt();
-								song["url"] = host + "/song/?id=" + item["id"].asString();
+								song["url"] = host + "/song?id=" + item["id"].asString();
 								songs.insertLast(song);
 							}
 
@@ -198,7 +198,7 @@ array<dictionary> RecommendSongs() {
 							}
 							dictionary song;
 							song["title"] = item["artists"][0]["name"].asString() + " - "  + item["name"].asString();
-							song["url"] = host + "/song/?id=" + item["id"].asString();
+							song["url"] = host + "/song?id=" + item["id"].asString();
 							songs.insertLast(song);
 						}
 					}
@@ -232,7 +232,7 @@ array<dictionary> ArtistSong(string id) {
 							}
 							dictionary song;
 							song["title"] = item["name"].asString();
-							song["url"] = host + "/song/?id=" + item["id"].asString();
+							song["url"] = host + "/song?id=" + item["id"].asString();
 							songs.insertLast(song);
 						}
 					}
@@ -263,7 +263,7 @@ array<dictionary> ArtistMV(string id) {
 						if (item.isObject()) {
 							dictionary mv;
 							mv["title"] = item["name"].asString();
-							mv["url"] = host + "/mv/?id=" + item["id"].asString();
+							mv["url"] = host + "/mv?id=" + item["id"].asString();
 							mvs.insertLast(mv);
 						}
 
@@ -299,7 +299,7 @@ array<dictionary> MVSublist() {
 							if (videoType == 1) {
 								song["url"] = host + "/#/video?id=" + item["vid"].asString();
 							} else if (videoType == 0) {
-								song["url"] = host + "/mv/?id=" + item["vid"].asString();
+								song["url"] = host + "/mv?id=" + item["vid"].asString();
 							}
 							songs.insertLast(song);
 						}
@@ -555,7 +555,7 @@ array<dictionary> BoughtSongs() {
 						if (item.isObject()) {
 							dictionary song;
 							song["title"] = item["artistName"].asString() + " - " + item["name"].asString();
-							song["url"] = host + "/song/?id=" + item["songId"].asString();
+							song["url"] = host + "/song?id=" + item["songId"].asString();
 							songs.insertLast(song);
 						}
 					}

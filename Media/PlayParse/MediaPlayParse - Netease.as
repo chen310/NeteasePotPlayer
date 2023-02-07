@@ -99,6 +99,7 @@ array<dictionary> Album(string id) {
 							}
 							dictionary song;
 							song["title"] = item["name"].asString();
+							song["duration"] = item["dt"].asInt();
 							song["url"] = host + "/song?id=" + item["id"].asString();
 							songs.insertLast(song);
 						}
@@ -134,6 +135,7 @@ array<dictionary> Playlist(string id) {
 							if (item.isObject()) {
 								dictionary song;
 								song["title"] = item["mlogBaseData"]["text"].asString();
+								song["duration"] = item["mlogBaseData"]["duration"].asInt();
 								string id = item["mlogBaseData"]["id"].asString();
 								int videoType = item["mlogBaseData"]["type"].asInt();
 								// videoType: 1: video, 2: mlog, 3: mv
@@ -198,6 +200,7 @@ array<dictionary> RecommendSongs() {
 							}
 							dictionary song;
 							song["title"] = item["artists"][0]["name"].asString() + " - "  + item["name"].asString();
+							song["duration"] = item["duration"].asInt();
 							song["url"] = host + "/song?id=" + item["id"].asString();
 							songs.insertLast(song);
 						}
@@ -232,6 +235,7 @@ array<dictionary> ArtistSong(string id) {
 							}
 							dictionary song;
 							song["title"] = item["name"].asString();
+							song["duration"] = item["dt"].asInt();
 							song["url"] = host + "/song?id=" + item["id"].asString();
 							songs.insertLast(song);
 						}
@@ -263,6 +267,7 @@ array<dictionary> ArtistMV(string id) {
 						if (item.isObject()) {
 							dictionary mv;
 							mv["title"] = item["name"].asString();
+							mv["duration"] = item["duration"].asInt();
 							mv["url"] = host + "/mv?id=" + item["id"].asString();
 							mvs.insertLast(mv);
 						}
@@ -282,7 +287,7 @@ array<dictionary> MVSublist() {
 	} else {
 		res = post("/api/cloudvideo/allvideo/sublist");
 	}
-	array<dictionary> songs;
+	array<dictionary> mvs;
 	if (!res.empty()) {
 		JsonReader Reader;
 		JsonValue Root;
@@ -293,22 +298,23 @@ array<dictionary> MVSublist() {
 					for (uint i = 0; i < data.size(); i++) {
 						JsonValue item = data[i];
 						if (item.isObject()) {
-							dictionary song;
+							dictionary mv;
 							int videoType = item["type"].asInt();
-							song["title"] = item["title"].asString();
+							mv["title"] = item["title"].asString();
+							mv["duration"] = item["durationms"].asInt();
 							if (videoType == 1) {
-								song["url"] = host + "/#/video?id=" + item["vid"].asString();
+								mv["url"] = host + "/#/video?id=" + item["vid"].asString();
 							} else if (videoType == 0) {
-								song["url"] = host + "/mv?id=" + item["vid"].asString();
+								mv["url"] = host + "/mv?id=" + item["vid"].asString();
 							}
-							songs.insertLast(song);
+							mvs.insertLast(mv);
 						}
 					}
 				}
 			}
 		}
 	}
-	return songs;
+	return mvs;
 }
 
 string MlogUrl(string id, const string &in path, dictionary &MetaData, array<dictionary> &QualityList) {
@@ -455,6 +461,7 @@ array<dictionary> Djradio(string id) {
 						if (item.isObject()) {
 							dictionary song;
 							song["title"] = item["name"].asString();
+							song["duration"] = item["duration"].asInt();
 							song["url"] = host + "#/program?id=" + item["id"].asString();
 							songs.insertLast(song);
 						}

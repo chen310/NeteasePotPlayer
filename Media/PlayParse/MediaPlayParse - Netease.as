@@ -666,7 +666,7 @@ bool PlaylistCheck(const string &in path) {
 		return true;
 	}
 
-	if (path.find("/my/m/music/mv") >= 0) {
+	if (path.find("/music/mv") >= 0) {
 		return true;
 	}
 
@@ -696,7 +696,7 @@ array<dictionary> PlaylistParse(const string &in path) {
 		return BoughtSongs();
 	}
 
-	if (path.find("/my/m/music/mv") >= 0) {
+	if (path.find("/music/mv") >= 0) {
 		return MVSublist();
 	}
 

@@ -38,11 +38,19 @@ bool useNeteaseApi = false;
 // 第三方 API 地址，详见 https://github.com/Binary/NeteaseCloudMusicApi
 string NeteaseApi = "";
 // 歌词 API
-string lyricApi = "https://netease-lyric.vercel.app";
+// string lyricApi = "https://netease-lyric.vercel.app";
+string lyricApi = "https://neteaselyric.chen310.repl.co";
 
 // ******************** 设置结束 ********************
 
 string host = "https://music.163.com";
+
+void OnInitialize() {
+	// replit 会休眠
+	if (lyricApi.find("repl.co") >= 0) {
+		HostUrlGetStringWithAPI(lyricApi);
+	}
+}
 
 string GetTitle() {
 

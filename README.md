@@ -12,7 +12,7 @@
 
 然后打开 `Netease_Config.json` 文件进行设置。
 
-```json
+```json5
 {
     // 填写账号 Cookie
     "cookie": "",

@@ -126,7 +126,7 @@ array<dictionary> RecommendPlaylist() {
 			if (Root["code"].asInt() == 200) {
 				JsonValue data = Root["recommend"];
 				if (data.isArray()) {
-					for (uint i = 0; i < data.size(); i++) {
+					for (int i = 0; i < data.size(); i++) {
 						JsonValue item = data[i];
 						if (item.isObject()) {
 							dictionary playlist;

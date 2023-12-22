@@ -1,0 +1,12 @@
+{
+    "cookie": "",
+    "VIPCookie": "",
+    "X-Real-IP": "",
+    "musicQuality": "hires",
+    "videoQesolution": "1080",
+    "skipUnavailable": true,
+    "useNeteaseApi": false,
+    "NeteaseApi": "",
+    "lyricApi": "",
+    "debug": false
+}

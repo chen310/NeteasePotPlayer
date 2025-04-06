@@ -95,10 +95,10 @@ string ServerLogin(string User, string Pass)
 	}
 	ConfigData = ReadConfigFile(User);
 	if (!ConfigData.cookie.empty() && ConfigData.cookie.find("os=") < 0) {
-		ConfigData.cookie += "; os=pc; appver=2.10.11.201538";
+		ConfigData.cookie += "; os=pc; appver=3.1.6.203622";
 	}
 	if (!ConfigData.VIPCookie.empty() && ConfigData.VIPCookie.find("os=") < 0) {
-		ConfigData.VIPCookie += "; os=pc; appver=2.10.11.201538";
+		ConfigData.VIPCookie += "; os=pc; appver=3.1.6.203622";
 	}
 	if (ConfigData.debug) {
 		HostOpenConsole();
